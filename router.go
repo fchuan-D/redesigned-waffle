@@ -6,7 +6,7 @@ import (
 )
 
 func initRouter(r *gin.Engine) {
-	apiRouter := r.Group("/#")
+	apiRouter := r.Group("/")
 	// basic apis
 	apiRouter.GET("/get", controller.GetUser)
 	// extra apis - I
