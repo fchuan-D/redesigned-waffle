@@ -18,7 +18,10 @@ func main() {
 	pprof.Register(r)
 
 	// localhost:8080
-	r.Run()
+	err := r.Run()
+	if err != nil {
+		return
+	}
 }
 
 // 加载项目环境
