@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
+	"soft-pro/conf"
 	"soft-pro/dao"
 )
 
@@ -26,6 +27,8 @@ func main() {
 
 // 加载项目环境
 func InitDeps() {
+	// 初始化配置
+	conf.InitConfig(".")
 	// 初始化数据库
 	dao.Init()
 }

@@ -1,15 +1,55 @@
 package conf
 
-import "time"
+import (
+	"github.com/spf13/viper"
+	"log"
+)
 
-// 数据库连接字段
-// 想要正确的处理 time.Time,需要带上 parseTime 参数，
-// 要支持完整的 UTF-8编码，需要将 charset=utf8 更改为 charset=utf8mb4
-var Dsn = "root:password@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
+type Config struct {
+	Dsn       string `mapstructure:"MYSQL_URI"`
+	RedisUrI  string `mapstructure:"REDIS_URI"`
+	RedisPass string `mapstructure:"REDIS_PASSWORD"`
+	RedisDb   int    `mapstructure:"REDIS_DB"`
 
-// 设置 Redis数据热度消散时间。
-var OneDayOfHours = 60 * 60 * 24
-var OneMinute = 60 * 1
-var OneMonth = 60 * 60 * 24 * 30
-var OneYear = 365 * 60 * 60 * 24
-var ExpireTime = time.Hour * 48
+	Port string `mapstructure:"PORT"`
+
+	JwtKey        string `mapstructure:"JWT_KEY"`
+	JwtAccessAge  int    `mapstructure:"JWT_ACCESS_AGE"`
+	JwtRefreshAge int    `mapstructure:"JWT_FRESH_AGE"`
+
+	EmailFrom string `mapstructure:"EMAIL_FROM"`
+	SmtpHost  string `mapstructure:"SMTP_HOST"`
+	SmtpUser  string `mapstructure:"SMTP_USER"`
+	SmtpPass  string `mapstructure:"SMTP_PASS"`
+	SmtpPort  int    `mapstructure:"SMTP_PORT"`
+
+	Origin  string `mapstructure:"CLIENT_ORIGIN"`
+	BaseUrl string `mapstructure:"BASE_URL"`
+}
+
+var config *Config
+
+func LoadConfig(path string) error {
+	viper.AddConfigPath(path)
+	viper.SetConfigName("app")
+	viper.SetConfigType("env")
+	viper.AutomaticEnv()
+	if err := viper.ReadInConfig(); err != nil {
+		return err
+	}
+	if err := viper.Unmarshal(&config); err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetConfig() *Config {
+	return config
+}
+
+func InitConfig(path string) {
+	err := LoadConfig(path)
+	if err != nil {
+		log.Fatal("Error loading config: ", err)
+	}
+}
