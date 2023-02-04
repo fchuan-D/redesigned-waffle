@@ -8,7 +8,7 @@ import (
 func initRouter(r *gin.Engine) {
 	apiRouter := r.Group("/")
 	// basic apis
-	apiRouter.GET("/get", controller.GetUser)
+	apiRouter.GET("/get/:id", controller.GetUser)
 	// extra apis - I
 
 	// extra apis - II

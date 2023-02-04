@@ -7,11 +7,13 @@ import (
 	"log"
 	"os"
 	"soft-pro/conf"
+	"soft-pro/entity"
 	"time"
 )
 
 var Db *gorm.DB
 
+// 初始化数据库
 func Init() {
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -22,11 +24,17 @@ func Init() {
 		},
 	)
 	var err error
-	dsn := conf.Dsn
+	dsn := conf.GetConfig().Dsn
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: newLogger,
 	})
 	if err != nil {
 		log.Panicln("err:", err.Error())
 	}
+	createTable()
+}
+
+// 映射结构体为数据库表
+func createTable() {
+	_ = Db.AutoMigrate(entity.User{})
 }

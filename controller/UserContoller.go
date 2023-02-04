@@ -1,26 +1,35 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
-	"soft-pro/dao"
 	"soft-pro/entity"
+	"soft-pro/service"
 )
 
 type UserResponse struct {
 	entity.Response
-	UserName string `json:"user_name"`
-	Role     string `json:"role"`
+	User entity.User `json:"user"`
 }
 
 func GetUser(c *gin.Context) {
-	var u entity.User
-	_ = dao.Db.AutoMigrate(entity.User{})
-	dao.Db.First(&u)
-	log.Println("==========>", u.UserName)
-	c.JSON(http.StatusOK, UserResponse{
-		UserName: u.UserName,
-		Role:     u.Role,
-	})
+	id := c.Param("id")
+	fmt.Println("查询ID为:", id)
+	u := service.Search(id)
+	if u.ID == 0 {
+		c.JSON(http.StatusUnprocessableEntity, entity.Response{
+			StatusCode: http.StatusUnprocessableEntity,
+			StatusMsg:  "查询不到该数据...",
+		})
+	} else {
+		c.JSON(http.StatusOK, UserResponse{
+			Response: entity.Response{
+				StatusCode: http.StatusOK,
+				StatusMsg:  "查询成功",
+			},
+			User: u,
+		})
+	}
+
 }
