@@ -6,7 +6,7 @@ import (
 )
 
 type Config struct {
-	Dsn       string `mapstructure:"MYSQL_URI"`
+	MysqlUrI  string `mapstructure:"MYSQL_URI"`
 	RedisUrI  string `mapstructure:"REDIS_URI"`
 	RedisPass string `mapstructure:"REDIS_PASSWORD"`
 	RedisDb   int    `mapstructure:"REDIS_DB"`
