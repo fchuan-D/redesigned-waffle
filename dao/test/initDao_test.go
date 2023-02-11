@@ -1,8 +1,9 @@
-package dao
+package test
 
 import (
 	"log"
 	"soft-pro/conf"
+	"soft-pro/dao"
 	"soft-pro/entity"
 	"testing"
 	"time"
@@ -11,13 +12,13 @@ import (
 // 数据库连接测试
 func TestDao(t *testing.T) {
 	conf.InitConfig("../")
-	Init()
+	dao.Init()
 
 	var u entity.User
-	Db.First(&u)
+	dao.Db.First(&u)
 	log.Println("==========>", u.UserName)
 
-	Rd.Set("test", "Hello World", 30*time.Second)
-	s, _ := Rd.Get("test").Result()
+	dao.Rd.Set("test", "Hello World", 30*time.Second)
+	s, _ := dao.Rd.Get("test").Result()
 	log.Println("==========>", s)
 }

@@ -24,7 +24,11 @@ const (
 	NotOkMsg               = "操作失败"
 	NotFindMsg             = "查询失败"
 	UnauthorizedMsg        = "登录过期, 需要重新登录"
-	LoginCheckErrorMsg     = "用户名或密码错误"
+	LoginCheckErrorMsg     = "密码错误"
+	PwdCheckErrorMsg       = "密码格式错误"
+	NameCheckErrorMsg      = "用户名格式错误"
+	PhoneCheckErrorMsg     = "手机号格式错误"
+	PhoneExistErrorMsg     = "该手机号已存在"
 	ForbiddenMsg           = "无权访问该资源, 请联系网站管理员授权"
 	InternalServerErrorMsg = "服务器内部错误"
 )

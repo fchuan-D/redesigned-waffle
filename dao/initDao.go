@@ -45,6 +45,7 @@ func initMysql() {
 // 映射结构体为数据库表
 func createTable() {
 	_ = Db.AutoMigrate(entity.User{})
+	_ = Db.AutoMigrate(entity.ChargePoint{})
 }
 
 // 初始化Redis数据库
