@@ -19,7 +19,7 @@ func main() {
 	pprof.Register(r)
 
 	// localhost:8080
-	err := r.Run()
+	err := r.Run(conf.GetConfig().Port)
 	if err != nil {
 		return
 	}
