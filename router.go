@@ -4,18 +4,23 @@ import (
 	"github.com/gin-gonic/gin"
 	"soft-pro/controller"
 	"soft-pro/middleware"
+	"soft-pro/middleware/jwt"
 )
 
 func initRouter(r *gin.Engine) {
 	r.Use(middleware.Cors())
 
-	apiRouter := r.Group("/")
+	basicRouter := r.Group("/")
 	// basic apis
-	apiRouter.GET("/get/:id", controller.GetUser)
-	apiRouter.POST("/register", controller.Register)
-	apiRouter.POST("/login", controller.Login)
-	// extra apis - I
+	basicRouter.POST("/register", controller.Register)
+	basicRouter.POST("/login", controller.Login)
 
+	userRouter := r.Group("/user")
+	// extra apis - I
+	userRouter.GET("/get/:id", jwt.JWT(), controller.GetUser)
+
+	adminRouter := r.Group("/admin")
 	// extra apis - II
+	adminRouter.GET("/get/:id", jwt.JWT(), controller.GetUser)
 
 }

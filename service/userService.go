@@ -3,9 +3,11 @@ package service
 import (
 	"errors"
 	"golang.org/x/crypto/bcrypt"
+	"soft-pro/conf"
 	"soft-pro/dao"
 	"soft-pro/entity"
 	"soft-pro/resp"
+	"time"
 )
 
 // 校验注册数据
@@ -41,7 +43,7 @@ func CheckLoginUser(phone string, password string) (entity.User, error) {
 	return u, nil
 }
 
-func GetUserByID(id string) entity.User {
+func GetUserByID(id any) entity.User {
 	return dao.GetUserByID(id)
 }
 
@@ -58,4 +60,11 @@ func InsertUser(u entity.User) error {
 	u.Password = string(hasedPassword)
 	dao.InsertUser(u)
 	return nil
+}
+
+// Redis缓存 	key:token - value:User
+func SaveBufferToRd(token string, u entity.User) {
+	expireTime := time.Now().Add(time.Duration(conf.GetConfig().JwtAccessAge) * time.Minute).Unix()
+	et := time.Unix(expireTime, 0)
+	dao.Rd.Set(token, &u, et.Sub(time.Now()))
 }

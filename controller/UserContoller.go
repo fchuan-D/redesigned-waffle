@@ -5,25 +5,40 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"soft-pro/entity"
+	"soft-pro/middleware/jwt"
 	"soft-pro/resp"
 	"soft-pro/service"
 )
 
 type UserResponse struct {
-	resp.Response
-	User entity.User `json:"user"`
+	User  entity.User `json:"user"`
+	Token string      `json:"token"`
 }
 
 func Login(c *gin.Context) {
 	phone := c.PostForm("telephone")
 	password := c.PostForm("password")
+
+	// 校验登陆信息
 	u, err := service.CheckLoginUser(phone, password)
 	// 登陆失败
 	if err != nil {
 		resp.FailWithMessage(err.Error(), c)
 		return
 	}
-	resp.OkWithData(u, c)
+
+	// 登陆成功后签发 token
+	token, err := jwt.GenerateToken(u.ID, u.UserName)
+	if err != nil {
+		resp.FailWithMessage(err.Error(), c)
+		return
+	}
+	// 缓存至 Redis
+	service.SaveBufferToRd(token, u)
+	resp.OkWithData(UserResponse{
+		User:  u,
+		Token: token,
+	}, c)
 }
 
 func Register(c *gin.Context) {
@@ -40,7 +55,7 @@ func Register(c *gin.Context) {
 		resp.FailWithMessage(err.Error(), c)
 		return
 	}
-	// 密码加密
+	// 新增用户
 	if service.InsertUser(u) != nil {
 		resp.FailWithMessage(err.Error(), c)
 		return
@@ -49,9 +64,8 @@ func Register(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-	id := c.Param("id")
-	fmt.Println("查询ID为:", id)
-	u := service.GetUserByID(id)
+	u := c.MustGet("user").(entity.User)
+	fmt.Println("当前登录用户ID:", u.ID)
 	if u.ID == 0 {
 		resp.FailWithMessage(resp.NotFindMsg, c)
 	} else {

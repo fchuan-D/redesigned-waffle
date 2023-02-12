@@ -2,7 +2,7 @@ package dao
 
 import "soft-pro/entity"
 
-func GetUserByID(id string) entity.User {
+func GetUserByID(id any) entity.User {
 	var u entity.User
 	Db.Find(&u, id)
 	return u

@@ -29,6 +29,10 @@ const (
 	NameCheckErrorMsg      = "用户名格式错误"
 	PhoneCheckErrorMsg     = "手机号格式错误"
 	PhoneExistErrorMsg     = "该手机号已存在"
+	TokenInValidErrorMsg   = "token信息不合法"
+	TokenWithoutErrorMsg   = "请携带token访问"
+	ParseTokenErrorMsg     = "解析token失败"
+	TokenExpiredErrorMsg   = "token已过期,请重新登录"
 	ForbiddenMsg           = "无权访问该资源, 请联系网站管理员授权"
 	InternalServerErrorMsg = "服务器内部错误"
 )
