@@ -8,7 +8,7 @@ import (
 // 用户
 type User struct {
 	gorm.Model
-	UserName string  `gorm:"comment:用户名;varchar(20);not null" json:"user_name"`
+	UserName string  `gorm:"comment:用户名;varchar(20);not null;unique" json:"user_name"`
 	Phone    string  `gorm:"comment:手机号;varchar(20);not null;unique" json:"telephone"`
 	Password string  `gorm:"comment:密码;size:255;not null" json:"-"`
 	Role     string  `gorm:"comment:用户角色" json:"role"`

@@ -19,6 +19,11 @@ func CheckUserByPhone(phone string) int64 {
 	return res.RowsAffected
 }
 
+func CheckUserByName(name string) int64 {
+	res := Db.Where("user_name = ?", name).First(&entity.User{})
+	return res.RowsAffected
+}
+
 func InsertUser(u entity.User) {
 	Db.Create(&u)
 }

@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"github.com/go-redis/redis/v7"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -13,12 +12,10 @@ import (
 )
 
 var Db *gorm.DB
-var Rd *redis.Client
 
 // 初始化数据库
 func Init() {
 	initMysql()
-	initRedis()
 }
 
 // 初始化Mysql数据库
@@ -44,18 +41,10 @@ func initMysql() {
 
 // 映射结构体为数据库表
 func createTable() {
-	_ = Db.AutoMigrate(entity.User{})
-	_ = Db.AutoMigrate(entity.ChargePoint{})
-}
-
-// 初始化Redis数据库
-func initRedis() {
-	Rd = redis.NewClient(&redis.Options{
-		Addr:     conf.GetConfig().RedisUrI,
-		Password: conf.GetConfig().RedisPass,
-	})
-	_, err := Rd.Ping().Result()
-	if err != nil {
-		panic(err)
-	}
+	_ = Db.AutoMigrate(
+		entity.User{},
+		entity.ChargePoint{},
+		entity.ChargeStation{},
+		entity.Oreder{},
+	)
 }

@@ -15,12 +15,14 @@ func initRouter(r *gin.Engine) {
 	basicRouter.POST("/register", controller.Register)
 	basicRouter.POST("/login", controller.Login)
 
-	userRouter := r.Group("/user")
 	// extra apis - I
-	userRouter.GET("/get/:id", jwt.JWT(), controller.GetUser)
+	userRouter := r.Group("/user")
+	userRouter.Use(jwt.UserJWT())
+	userRouter.GET("/get/:id", controller.GetUser)
 
-	adminRouter := r.Group("/admin")
 	// extra apis - II
-	adminRouter.GET("/get/:id", jwt.JWT(), controller.GetUser)
+	adminRouter := r.Group("/admin")
+	adminRouter.Use(jwt.AdminJWT())
+	adminRouter.GET("/get/:id", controller.GetUser)
 
 }
