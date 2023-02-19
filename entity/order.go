@@ -9,7 +9,7 @@ type Order struct {
 	Status bool `gorm:"comment:支付状态"`
 	Amount int  `gorm:"comment:订单金额"`
 	Charge uint `gorm:"comment:充电时长"`
-	UserID uint `gorm:"comment:订单用户"`
+	UserID uint `gorm:"comment:订单用户" json:"userID"`
 }
 
 // TableName 修改表名映射

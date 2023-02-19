@@ -41,10 +41,8 @@ func initMysql() {
 
 // 映射结构体为数据库表
 func createTable() {
-	_ = Db.AutoMigrate(
-		entity.User{},
-		entity.ChargePoint{},
-		entity.ChargeStation{},
-		entity.Order{},
-	)
+	_ = Db.AutoMigrate(entity.User{})
+	_ = Db.AutoMigrate(entity.ChargePoint{})
+	_ = Db.AutoMigrate(entity.ChargeStation{})
+	_ = Db.AutoMigrate(entity.Order{})
 }
