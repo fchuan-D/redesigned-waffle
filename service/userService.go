@@ -11,7 +11,6 @@ import (
 	"soft-pro/resp"
 	"soft-pro/utils"
 	"strconv"
-	"time"
 )
 
 // 校验注册数据
@@ -28,12 +27,39 @@ func CheckRegisterUser(u entity.User) error {
 	}
 
 	// 判断手机号是否存在
-	i := dao.CheckUserByPhone(u.Phone)
+	i := dao.CheckUserByPhone(u.Phone, u.ID)
 	if i != 0 {
 		return errors.New(resp.PhoneExistErrorMsg)
 	}
 	// 判断用户名是否重复
-	n := dao.CheckUserByName(u.UserName)
+	n := dao.CheckUserByName(u.UserName, u.ID)
+	if n != 0 {
+		return errors.New(resp.NameExistErrorMsg)
+	}
+
+	return nil
+}
+
+// 校验更新数据
+func CheckUpdateUser(u entity.User) error {
+	// 格式校验
+	if len(u.UserName) == 0 || len(u.UserName) > 20 {
+		return errors.New(resp.NameCheckErrorMsg)
+	}
+	if len(u.Phone) != 11 {
+		return errors.New(resp.PhoneCheckErrorMsg)
+	}
+	if len(u.Password) < 6 || len(u.Password) > 20 {
+		return errors.New(resp.PwdCheckErrorMsg)
+	}
+
+	// 判断手机号是否存在
+	i := dao.CheckUserByPhone(u.Phone, u.ID)
+	if i != 0 {
+		return errors.New(resp.PhoneExistErrorMsg)
+	}
+	// 判断用户名是否重复
+	n := dao.CheckUserByName(u.UserName, u.ID)
 	if n != 0 {
 		return errors.New(resp.NameExistErrorMsg)
 	}
@@ -80,15 +106,20 @@ func InsertUser(u entity.User) error {
 	}
 	u.Password = string(hasedPassword)
 	dao.InsertUser(u)
+	UpdateBufferToRd(u)
 	return nil
 }
 
-// Redis缓存
+// 更新 Redis缓存
+func UpdateBufferToRd(u entity.User) {
+	// key:User.ID - value:User
+	redis.GetClient().Set(strconv.Itoa(int(u.ID)), &u, 0)
+}
+
+// 加入 Redis缓存
 func SaveBufferToRd(token string, u entity.User) {
-	expireTime := time.Now().Add(time.Duration(conf.GetConfig().JwtAccessAge) * time.Minute).Unix()
-	et := time.Unix(expireTime, 0)
 	// key:token - value:User.ID
-	redis.GetClient().Set(token, u.ID, et.Sub(time.Now()))
+	redis.SetHour(token, strconv.Itoa(int(u.ID)), int64(conf.GetConfig().JwtAccessAge))
 	// key:User.ID - value:User
 	redis.GetClient().Set(strconv.Itoa(int(u.ID)), &u, 0)
 }

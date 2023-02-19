@@ -10,11 +10,12 @@ import (
 	"soft-pro/service"
 )
 
-type UserResponse struct {
+type LoginResponse struct {
 	User  entity.User `json:"user"`
 	Token string      `json:"token"`
 }
 
+// POST login/ 用户登录
 func Login(c *gin.Context) {
 	phone := c.PostForm("telephone")
 	password := c.PostForm("password")
@@ -35,12 +36,13 @@ func Login(c *gin.Context) {
 	}
 	// 缓存至 Redis
 	service.SaveBufferToRd(token, u)
-	resp.OkWithData(UserResponse{
+	resp.OkWithData(LoginResponse{
 		User:  u,
 		Token: token,
 	}, c)
 }
 
+// POST register/ 用户注册
 func Register(c *gin.Context) {
 	//获取参数
 	u := entity.User{
@@ -63,12 +65,34 @@ func Register(c *gin.Context) {
 	c.Redirect(http.StatusPermanentRedirect, "/login")
 }
 
-func GetUser(c *gin.Context) {
-	u := c.MustGet("user").(entity.User)
-	fmt.Println("当前登录用户ID:", u.ID)
-	if u.ID == 0 {
-		resp.FailWithMessage(resp.NotFindMsg, c)
+// GET /user/info/:id 获取用户信息
+func UserInfo(c *gin.Context) {
+	uid := c.Param("id")
+	user, err := service.GetUserByID(uid)
+	if err != nil {
+		resp.FailWithMessage(resp.UserNotExistErrorMsg, c)
 	} else {
-		resp.OkWithData(u, c)
+		resp.OkWithData(user, c)
 	}
+}
+
+// POST /user/update 更新用户信息
+func UpdateUser(c *gin.Context) {
+	var u entity.User
+	err := c.ShouldBind(&u)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	// 校验数据
+	if err := service.CheckUpdateUser(u); err != nil {
+		resp.FailWithMessage(err.Error(), c)
+		return
+	}
+	// 更新数据
+	if err := service.InsertUser(u); err != nil {
+		resp.FailWithMessage(err.Error(), c)
+		return
+	}
+	resp.OkWithData(u, c)
 }

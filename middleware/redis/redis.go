@@ -19,19 +19,19 @@ func GetClient() (clint *redis.Client) {
 }
 
 /*
-基于go-redis
+基于 go-redis
 github地址:https://github.com/go-redis/redis
 设置小时 demo
 */
-func SetHour() (result *redis.StatusCmd) {
+func SetHour(key string, value string, i int64) (result *redis.StatusCmd) {
 	client := GetClient()
-	// 注意time.Hour 要乘以一个具体的数值
-	set := client.Set("hour", "3个小时", time.Hour*3)
+	// 注意 time.Hour 要乘以一个具体的数值
+	set := client.Set(key, value, time.Duration(i)*time.Hour)
 	return set
 }
 
 /*
-基于go-redis
+基于 go-redis
 github地址:https://github.com/go-redis/redis
 设置分钟 demo
 */
@@ -43,7 +43,7 @@ func SetMini(key string, value string, i int64) (result *redis.StatusCmd) {
 }
 
 /*
-基于go-redis
+基于 go-redis
 github地址:https://github.com/go-redis/redis
 get的 demo
 */

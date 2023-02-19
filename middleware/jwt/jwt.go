@@ -18,7 +18,7 @@ type MyClaim struct {
 }
 
 func GenerateToken(id uint, name string) (string, error) {
-	expireTime := time.Now().Add(time.Duration(conf.GetConfig().JwtAccessAge) * time.Minute)
+	expireTime := time.Now().Add(time.Duration(conf.GetConfig().JwtAccessAge) * time.Hour)
 	// 实例化claim
 	claim := MyClaim{
 		UserID: id,

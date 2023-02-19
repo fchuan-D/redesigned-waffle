@@ -14,15 +14,18 @@ func initRouter(r *gin.Engine) {
 	// basic apis
 	basicRouter.POST("/register", controller.Register)
 	basicRouter.POST("/login", controller.Login)
+	basicRouter.POST("/station/list", controller.StationList)
+	basicRouter.GET("/points/:StationID", controller.PointList)
 
 	// extra apis - I
 	userRouter := r.Group("/user")
 	userRouter.Use(jwt.UserJWT())
-	userRouter.GET("/get/:id", controller.GetUser)
+	userRouter.GET("/info/:id", controller.UserInfo)
+	userRouter.POST("/update", controller.UpdateUser)
 
 	// extra apis - II
 	adminRouter := r.Group("/admin")
 	adminRouter.Use(jwt.AdminJWT())
-	adminRouter.GET("/get/:id", controller.GetUser)
+	adminRouter.GET("/get/:id", controller.UserInfo)
 
 }

@@ -22,7 +22,7 @@ func GetBusyChargePoint(StationID any) []entity.ChargePoint {
 	return cps
 }
 
-// 获取当前充电站下所有的充电桩
+// 获取充电站列表
 func GetTotalChargePoint(StationID any) []entity.ChargePoint {
 	var cps []entity.ChargePoint
 	Db.Find(&cps, "station_id = ?", StationID)

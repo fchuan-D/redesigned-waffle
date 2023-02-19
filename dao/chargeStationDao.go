@@ -8,6 +8,12 @@ func GetChargeStationByID(id any) entity.ChargeStation {
 	return cs
 }
 
+func GetAllChargeStation() []entity.ChargeStation {
+	var css []entity.ChargeStation
+	Db.Preload("ChargePoints").Find(&css)
+	return css
+}
+
 func GetChargeStationByArea(area string) entity.ChargeStation {
 	var cs entity.ChargeStation
 	Db.Find(&cs, "area = ?", area)

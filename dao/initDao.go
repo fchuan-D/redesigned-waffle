@@ -45,6 +45,6 @@ func createTable() {
 		entity.User{},
 		entity.ChargePoint{},
 		entity.ChargeStation{},
-		entity.Oreder{},
+		entity.Order{},
 	)
 }

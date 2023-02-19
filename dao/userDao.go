@@ -4,7 +4,7 @@ import "soft-pro/entity"
 
 func GetUserByID(id any) entity.User {
 	var u entity.User
-	Db.Find(&u, id)
+	Db.Preload("Orders").Find(&u, id)
 	return u
 }
 
@@ -14,16 +14,16 @@ func GetUserByPhone(phone string) entity.User {
 	return u
 }
 
-func CheckUserByPhone(phone string) int64 {
-	res := Db.Where("phone = ?", phone).First(&entity.User{})
+func CheckUserByPhone(phone string, uid any) int64 {
+	res := Db.Where("phone = ? and id != ?", phone, uid).First(&entity.User{})
 	return res.RowsAffected
 }
 
-func CheckUserByName(name string) int64 {
-	res := Db.Where("user_name = ?", name).First(&entity.User{})
+func CheckUserByName(name string, uid any) int64 {
+	res := Db.Where("user_name = ? and id != ?", name, uid).First(&entity.User{})
 	return res.RowsAffected
 }
 
 func InsertUser(u entity.User) {
-	Db.Create(&u)
+	Db.Save(&u)
 }

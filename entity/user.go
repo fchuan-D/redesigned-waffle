@@ -10,10 +10,11 @@ type User struct {
 	gorm.Model
 	UserName string  `gorm:"comment:用户名;varchar(20);not null;unique" json:"user_name"`
 	Phone    string  `gorm:"comment:手机号;varchar(20);not null;unique" json:"telephone"`
-	Password string  `gorm:"comment:密码;size:255;not null" json:"-"`
+	Password string  `gorm:"comment:密码;size:255;not null" json:"password"`
 	Role     string  `gorm:"comment:用户角色" json:"role"`
 	Bal      float64 `gorm:"comment:余额;column:balance;default:0" json:"balance"`
 	Ban      bool    `gorm:"comment:是否已开通余额;default:0" json:"ban"`
+	Orders   []Order `gorm:"foreignKey:UserID"`
 }
 
 // 序列化
