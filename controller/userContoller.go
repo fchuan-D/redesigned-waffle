@@ -15,7 +15,7 @@ type LoginResponse struct {
 	Token string      `json:"token"`
 }
 
-// POST login/ 用户登录
+// POST /login 用户登录
 func Login(c *gin.Context) {
 	phone := c.PostForm("telephone")
 	password := c.PostForm("password")
@@ -42,11 +42,11 @@ func Login(c *gin.Context) {
 	}, c)
 }
 
-// POST register/ 用户注册
+// POST /register 用户注册
 func Register(c *gin.Context) {
 	//获取参数
 	u := entity.User{
-		UserName: c.PostForm("user_name"),
+		UserName: c.PostForm("userName"),
 		Phone:    c.PostForm("telephone"),
 		Password: c.PostForm("password"),
 		Role:     "user",
@@ -65,12 +65,12 @@ func Register(c *gin.Context) {
 	c.Redirect(http.StatusPermanentRedirect, "/login")
 }
 
-// GET /user/info/:id 获取用户信息
+// GET /user/info 获取用户信息
 func UserInfo(c *gin.Context) {
-	uid := c.Param("id")
-	user, err := service.GetUserByID(uid)
+	u, _ := c.Get("user")
+	user, err := service.GetUserByID(u.(entity.User).ID)
 	if err != nil {
-		resp.FailWithMessage(resp.UserNotExistErrorMsg, c)
+		resp.FailWithMessage(err.Error(), c)
 	} else {
 		resp.OkWithData(user, c)
 	}

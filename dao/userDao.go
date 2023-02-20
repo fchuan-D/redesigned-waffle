@@ -24,6 +24,10 @@ func CheckUserByName(name string, uid any) int64 {
 	return res.RowsAffected
 }
 
-func InsertUser(u entity.User) {
-	Db.Save(&u)
+func InsertUser(u entity.User) error {
+	return Db.Save(&u).Error
+}
+
+func UpdateBal(u entity.User) error {
+	return Db.Model(&entity.User{}).Where("id = ?", u.ID).Update("balance", u.Bal).Error
 }

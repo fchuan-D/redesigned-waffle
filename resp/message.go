@@ -6,9 +6,9 @@ import (
 )
 
 type Response struct {
-	StatusCode int         `json:"status_code"`          // 错误代码
-	StatusMsg  string      `json:"status_msg,omitempty"` // 消息提示
-	Data       interface{} `json:"data,omitempty"`       // 数据内容
+	StatusCode int         `json:"statusCode"`          // 错误代码
+	StatusMsg  string      `json:"statusMsg,omitempty"` // 消息提示
+	Data       interface{} `json:"data,omitempty"`      // 数据内容
 }
 
 const (
@@ -38,6 +38,8 @@ const (
 	TokenExpiredErrorMsg   = "token已过期,请重新登录"
 	ForbiddenMsg           = "无权访问该资源, 请联系网站管理员授权"
 	InternalServerErrorMsg = "服务器内部错误"
+	NotEnoughMsg           = "余额不足"
+	OrderPaidMsg           = "订单已支付"
 )
 
 const (

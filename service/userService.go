@@ -105,7 +105,10 @@ func InsertUser(u entity.User) error {
 		return errors.New("密码加密错误")
 	}
 	u.Password = string(hasedPassword)
-	dao.InsertUser(u)
+	err = dao.InsertUser(u)
+	if err != nil {
+		return errors.New("注册失败")
+	}
 	UpdateBufferToRd(u)
 	return nil
 }

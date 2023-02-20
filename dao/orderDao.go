@@ -29,3 +29,13 @@ func GetOrdersByUserPaid(UserID any) []entity.Order {
 	Db.Where("user_id = ? and status = ?", UserID, true).Scan(&os)
 	return os
 }
+
+// 创建订单
+func CreateOrder(o entity.Order) error {
+	return Db.Create(&o).Error
+}
+
+// 支付订单
+func PayOrder(id any) error {
+	return Db.Model(&entity.Order{}).Where("id = ?", id).Update("status", true).Error
+}
