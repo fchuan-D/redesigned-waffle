@@ -34,7 +34,7 @@ func CreateOrder(order entity.Order) error {
 
 func PayOrder(orderID any, UserID any) error {
 	exist := dao.GetOrderByID(orderID)
-	if exist.Status != false {
+	if exist.Status != 2 {
 		return errors.New(resp.OrderPaidMsg)
 	}
 

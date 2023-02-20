@@ -33,7 +33,7 @@ func OrderList(c *gin.Context) {
 func CreateOrder(c *gin.Context) {
 	//获取参数
 	order := entity.Order{
-		Status:  false,
+		Status:  2,
 		Amount:  c.PostForm("amount"),
 		Charge:  c.PostForm("charge"),
 		Type:    c.PostForm("type"),
