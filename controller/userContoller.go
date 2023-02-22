@@ -96,3 +96,19 @@ func UpdateUser(c *gin.Context) {
 	}
 	resp.OkWithData(u, c)
 }
+
+// POST /user/update/bal 更新用户余额
+func UpdateBal(c *gin.Context) {
+	var u entity.User
+	err := c.ShouldBind(&u)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	// 更新数据
+	if err := service.UpdateBal(u); err != nil {
+		resp.FailWithMessage(err.Error(), c)
+		return
+	}
+	resp.OkWithData(u, c)
+}

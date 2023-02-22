@@ -113,10 +113,21 @@ func InsertUser(u entity.User) error {
 	return nil
 }
 
+// 更新余额
+func UpdateBal(u entity.User) error {
+	err := dao.UpdateBal(u)
+	if err != nil {
+		return errors.New("更新余额失败")
+	}
+	UpdateBufferToRd(u)
+	return nil
+}
+
 // 更新 Redis缓存
 func UpdateBufferToRd(u entity.User) {
+	user := dao.GetUserByID(u.ID)
 	// key:User.ID - value:User
-	redis.GetClient().Set(strconv.Itoa(int(u.ID)), &u, 0)
+	redis.GetClient().Set(strconv.Itoa(int(u.ID)), &user, 0)
 }
 
 // 加入 Redis缓存

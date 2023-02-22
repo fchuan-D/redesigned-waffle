@@ -40,6 +40,7 @@ const (
 	InternalServerErrorMsg = "服务器内部错误"
 	NotEnoughMsg           = "余额不足"
 	OrderPaidMsg           = "订单已支付"
+	OrderAbortMsg          = "订单已取消"
 )
 
 const (

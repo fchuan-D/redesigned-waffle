@@ -37,5 +37,5 @@ func CreateOrder(o entity.Order) error {
 
 // 支付订单
 func PayOrder(id any) error {
-	return Db.Model(&entity.Order{}).Where("id = ?", id).Update("status", true).Error
+	return Db.Model(&entity.Order{}).Where("id = ?", id).Update("status", 0).Error
 }
