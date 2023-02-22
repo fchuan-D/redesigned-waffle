@@ -27,6 +27,7 @@ func initRouter(r *gin.Engine) {
 	userRouter.POST("/order/create", controller.CreateOrder)
 	userRouter.GET("/order/pay/:OrderID", controller.PayOrder)
 	userRouter.POST("/update/bal", controller.UpdateBal)
+	userRouter.DELETE("/order/delete/:OrderID", controller.DeleteOrder)
 
 	// extra apis - II
 	adminRouter := r.Group("/admin")

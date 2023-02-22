@@ -18,6 +18,17 @@ func OrderInfo(c *gin.Context) {
 	}
 }
 
+// DELETE /order/delete/:OrderID 删除订单
+func DeleteOrder(c *gin.Context) {
+	//获取参数
+	oid := c.Param("OrderID")
+	err := service.DeleteOrder(oid)
+	if err != nil {
+		resp.FailWithMessage(resp.NotOkMsg, c)
+	}
+	resp.OkResult(c)
+}
+
 // GET /order/list 获取用户所有订单
 func OrderList(c *gin.Context) {
 	u, _ := c.Get("user")

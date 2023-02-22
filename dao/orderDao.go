@@ -39,3 +39,7 @@ func CreateOrder(o entity.Order) error {
 func PayOrder(id any) error {
 	return Db.Model(&entity.Order{}).Where("id = ?", id).Update("status", 0).Error
 }
+
+func DeleteOrder(id any) error {
+	return Db.Delete(&entity.Order{}, id).Error
+}

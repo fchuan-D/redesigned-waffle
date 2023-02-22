@@ -31,6 +31,13 @@ func CreateOrder(order entity.Order) error {
 	}
 	return nil
 }
+func DeleteOrder(orderID any) error {
+	err := dao.DeleteOrder(orderID)
+	if err != nil {
+		return errors.New(resp.NotOkMsg)
+	}
+	return nil
+}
 
 func PayOrder(orderID any, UserID any) error {
 	exist := dao.GetOrderByID(orderID)
