@@ -5,6 +5,7 @@ import (
 	"soft-pro/entity"
 	"soft-pro/resp"
 	"soft-pro/service"
+	"strconv"
 )
 
 // GET /order/info/:OrderID 获取订单信息
@@ -43,10 +44,12 @@ func OrderList(c *gin.Context) {
 // POST /order/create 创建订单
 func CreateOrder(c *gin.Context) {
 	//获取参数
+	amount, _ := strconv.ParseFloat(c.PostForm("amount"), 64)
+	charge, _ := strconv.ParseFloat(c.PostForm("charge"), 64)
 	order := entity.Order{
 		Status:  2,
-		Amount:  c.PostForm("amount"),
-		Charge:  c.PostForm("charge"),
+		Amount:  amount,
+		Charge:  charge,
 		Type:    c.PostForm("type"),
 		UserID:  c.PostForm("userID"),
 		PointID: c.PostForm("pointID"),

@@ -5,7 +5,6 @@ import (
 	"soft-pro/dao"
 	"soft-pro/entity"
 	"soft-pro/resp"
-	"strconv"
 )
 
 func GetOrderByID(orderID any) (entity.Order, error) {
@@ -52,17 +51,21 @@ func PayOrder(orderID any, UserID any) error {
 
 	order := dao.GetOrderByID(orderID)
 	user := dao.GetUserByID(UserID)
-	amount, err := strconv.ParseFloat(order.Amount, 64)
+
+	// 支付后更新用户的总消费
+	user.TotalPay += order.Amount
+	// 支付后更新用户的总充值
+	user.TotalCharge += order.Charge
+
 	if err != nil {
 		return errors.New(resp.NotOkMsg)
 	}
 
-	if user.Bal < amount {
+	if user.Bal < order.Amount {
 		return errors.New(resp.NotEnoughMsg)
 	}
-	user.Bal -= amount
-
-	err = dao.UpdateBal(user.ID, user.Bal)
+	user.Bal -= order.Amount
+	err = dao.InsertUser(user)
 	if err != nil {
 		return errors.New(resp.NotOkMsg)
 	}

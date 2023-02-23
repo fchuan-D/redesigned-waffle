@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"fmt"
 	"soft-pro/entity"
 	"time"
 )
@@ -50,6 +49,5 @@ func DeleteOrder(id any) error {
 }
 
 func AbortOrder(id any) error {
-	fmt.Println(id)
 	return Db.Model(&entity.Order{}).Where("id = ?", id).Update("status", 1).Error
 }

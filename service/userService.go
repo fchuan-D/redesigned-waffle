@@ -117,7 +117,9 @@ func InsertUser(u entity.User) error {
 func UpdateBal(id uint, bal float64) error {
 	ou := dao.GetUserByID(id)
 	ou.Bal += bal
-	err := dao.UpdateBal(id, ou.Bal)
+	// 更新总余额
+	ou.TotalBal += bal
+	err := dao.InsertUser(ou)
 	if err != nil {
 		return errors.New("更新余额失败")
 	}
