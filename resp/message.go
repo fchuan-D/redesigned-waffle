@@ -6,9 +6,9 @@ import (
 )
 
 type Response struct {
-	StatusCode int         `json:"status_code"`          // 错误代码
-	StatusMsg  string      `json:"status_msg,omitempty"` // 消息提示
-	Data       interface{} `json:"data,omitempty"`       // 数据内容
+	StatusCode int         `json:"statusCode"`          // 错误代码
+	StatusMsg  string      `json:"statusMsg,omitempty"` // 消息提示
+	Data       interface{} `json:"data,omitempty"`      // 数据内容
 }
 
 const (
@@ -27,14 +27,20 @@ const (
 	LoginCheckErrorMsg     = "密码错误"
 	PwdCheckErrorMsg       = "密码格式错误"
 	NameCheckErrorMsg      = "用户名格式错误"
+	UserNotExistErrorMsg   = "该用户不存在"
 	PhoneCheckErrorMsg     = "手机号格式错误"
+	PhoneNotExistErrorMsg  = "该手机号未注册"
 	PhoneExistErrorMsg     = "该手机号已存在"
+	NameExistErrorMsg      = "该用户名已存在"
 	TokenInValidErrorMsg   = "token信息不合法"
 	TokenWithoutErrorMsg   = "请携带token访问"
 	ParseTokenErrorMsg     = "解析token失败"
 	TokenExpiredErrorMsg   = "token已过期,请重新登录"
 	ForbiddenMsg           = "无权访问该资源, 请联系网站管理员授权"
 	InternalServerErrorMsg = "服务器内部错误"
+	NotEnoughMsg           = "余额不足"
+	OrderPaidMsg           = "订单已支付"
+	OrderAbortMsg          = "订单已取消"
 )
 
 const (
