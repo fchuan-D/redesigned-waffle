@@ -6,7 +6,7 @@ import (
 
 type Order struct {
 	gorm.Model
-	Time    string `gorm:"comment:订单发起时间;type:varchar(100)" json:"time"`
+	Time    int64  `gorm:"comment:订单发起时间;type:varchar(100)" json:"time"`
 	Status  int    `gorm:"comment:支付状态，0已支付，1已取消，2未支付" json:"status"`
 	Amount  string `gorm:"comment:订单金额;type:varchar(100)" json:"amount"`
 	Charge  string `gorm:"comment:充电时长;type:varchar(100)" json:"charge"`

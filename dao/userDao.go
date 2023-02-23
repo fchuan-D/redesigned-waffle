@@ -28,6 +28,6 @@ func InsertUser(u entity.User) error {
 	return Db.Save(&u).Error
 }
 
-func UpdateBal(u entity.User) error {
-	return Db.Model(&entity.User{}).Where("id = ?", u.ID).Update("balance", u.Bal).Error
+func UpdateBal(uid uint, bal float64) error {
+	return Db.Model(&entity.User{}).Where("id = ?", uid).Update("balance", bal).Error
 }

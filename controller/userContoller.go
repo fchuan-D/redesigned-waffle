@@ -8,6 +8,7 @@ import (
 	"soft-pro/middleware/jwt"
 	"soft-pro/resp"
 	"soft-pro/service"
+	"strconv"
 )
 
 type LoginResponse struct {
@@ -99,16 +100,17 @@ func UpdateUser(c *gin.Context) {
 
 // POST /user/update/bal 更新用户余额
 func UpdateBal(c *gin.Context) {
-	var u entity.User
-	err := c.ShouldBind(&u)
+	bal := c.PostForm("balance")
+	changeBal, err := strconv.ParseFloat(bal, 64)
 	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	// 更新数据
-	if err := service.UpdateBal(u); err != nil {
 		resp.FailWithMessage(err.Error(), c)
 		return
 	}
-	resp.OkWithData(u, c)
+	u, _ := c.Get("user")
+	err = service.UpdateBal(u.(entity.User).ID, changeBal)
+	if err != nil {
+		resp.FailWithMessage(err.Error(), c)
+		return
+	}
+	resp.OkResult(c)
 }

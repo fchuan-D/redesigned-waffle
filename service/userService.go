@@ -114,12 +114,15 @@ func InsertUser(u entity.User) error {
 }
 
 // 更新余额
-func UpdateBal(u entity.User) error {
-	err := dao.UpdateBal(u)
+func UpdateBal(id uint, bal float64) error {
+	ou := dao.GetUserByID(id)
+	ou.Bal += bal
+	err := dao.UpdateBal(id, ou.Bal)
 	if err != nil {
 		return errors.New("更新余额失败")
 	}
-	UpdateBufferToRd(u)
+	nu := dao.GetUserByID(id)
+	UpdateBufferToRd(nu)
 	return nil
 }
 

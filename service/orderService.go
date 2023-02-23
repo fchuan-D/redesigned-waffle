@@ -62,7 +62,15 @@ func PayOrder(orderID any, UserID any) error {
 	}
 	user.Bal -= amount
 
-	err = dao.UpdateBal(user)
+	err = dao.UpdateBal(user.ID, user.Bal)
+	if err != nil {
+		return errors.New(resp.NotOkMsg)
+	}
+	return nil
+}
+
+func AbortOrder(orderID any) error {
+	err := dao.AbortOrder(orderID)
 	if err != nil {
 		return errors.New(resp.NotOkMsg)
 	}

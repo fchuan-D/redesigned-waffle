@@ -1,6 +1,10 @@
 package dao
 
-import "soft-pro/entity"
+import (
+	"fmt"
+	"soft-pro/entity"
+	"time"
+)
 
 // 根据 OrderID获取订单数据
 func GetOrderByID(id any) entity.Order {
@@ -32,6 +36,7 @@ func GetOrdersByUserPaid(UserID any) []entity.Order {
 
 // 创建订单
 func CreateOrder(o entity.Order) error {
+	o.Time = time.Now().UnixMilli()
 	return Db.Create(&o).Error
 }
 
@@ -42,4 +47,9 @@ func PayOrder(id any) error {
 
 func DeleteOrder(id any) error {
 	return Db.Delete(&entity.Order{}, id).Error
+}
+
+func AbortOrder(id any) error {
+	fmt.Println(id)
+	return Db.Model(&entity.Order{}).Where("id = ?", id).Update("status", 1).Error
 }

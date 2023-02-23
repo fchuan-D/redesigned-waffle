@@ -58,6 +58,18 @@ func CreateOrder(c *gin.Context) {
 	resp.OkResult(c)
 }
 
+// GET /order/abort/:OrderID 取消订单
+func AbortOrder(c *gin.Context) {
+	//获取参数
+	oid := c.Param("OrderID")
+	err := service.AbortOrder(oid)
+	if err != nil {
+		resp.FailWithMessage(err.Error(), c)
+		return
+	}
+	resp.OkResult(c)
+}
+
 // GET /order/pay/:OrderID 支付订单
 func PayOrder(c *gin.Context) {
 	//获取参数
